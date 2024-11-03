@@ -98,6 +98,7 @@ def olin(message):
     cur.close()
     conn.close()
     pr()
+
     bot.send_message(message.chat.id , "All good")
 
 @bot.message_handler(commands=['drop'])
