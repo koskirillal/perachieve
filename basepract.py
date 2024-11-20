@@ -4,13 +4,11 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
-browser = webdriver.Chrome()
-browser.get("https://diploma.olimpiada.ru/full-diplomas")
-browsermephi = webdriver.Chrome()
-browsermephi.get("https://admission.mephi.ru/admission/baccalaureate-and-specialty/specials/winners")
 
 
-def check_exists_by_xpath(xpath):
+
+
+def check_exists_by_xpath(xpath , browser):
     try:
         browser.find_element(By.XPATH, xpath)
     except NoSuchElementException:
@@ -18,7 +16,7 @@ def check_exists_by_xpath(xpath):
     return True
 
 
-def check_exists_by_xpath_mephi(xpath):
+def check_exists_by_xpath_mephi(xpath , browsermephi):
     try:
         browsermephi.find_element(By.XPATH, xpath)
     except NoSuchElementException:
@@ -27,6 +25,8 @@ def check_exists_by_xpath_mephi(xpath):
 
 
 def esr(s1, s2, s3, s4):
+    browser = webdriver.Chrome()
+    browser.get("https://diploma.olimpiada.ru/full-diplomas")
     inputsur = browser.find_element(By.XPATH,
                                     '/html/body/div[1]/div[2]/div/div[3]/div[1]/div[1]/div[1]/div/div[1]/div[2]/input').send_keys(
         s1)
@@ -42,11 +42,16 @@ def esr(s1, s2, s3, s4):
     button = browser.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/div[3]/div[1]/div[1]/div[1]/input').click()
     table = browser.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/div[3]/div[1]/div[1]/div[2]')
     spisok = list()
+    '''/html/body/div[1]/div[2]/div/div[3]/div[1]/div[1]/div[2]/p/table[1]/tbody/tr/td[5]'''
+    '''/html/body/div[1]/div[2]/div/div[3]/div[1]/div[1]/div[2]/p/table[2]/tbody/tr/td[5]'''
+    '''/html/body/div[1]/div[2]/div/div[3]/div[1]/div[1]/div[2]/p/table[3]/tbody/tr/td[5]'''
     for i in range(1, 100):
         xpath = "/html/body/div[1]/div[2]/div/div[3]/div[1]/div[1]/div[2]/p/table[" + str(i) + "]"
-        if (check_exists_by_xpath(xpath)):
+        if (check_exists_by_xpath(xpath , browser)):
             block = (browser.find_element(By.XPATH, xpath))
-            spisok.append(block.text)
+            block2 = browser.find_element(By.XPATH , xpath + '''/tbody/tr/td[5]''')
+            if (int(block2.text) >= 10):
+                spisok.append(block.text)
 
     return spisok
 
@@ -90,21 +95,18 @@ def to_name(a: list):
 
 
 def pars_mephi():
+    browsermephi = webdriver.Chrome()
+    browsermephi.get("https://admission.mephi.ru/admission/baccalaureate-and-specialty/specials/winners")
     table = browsermephi.find_element(By.XPATH,
                                       "/html/body/div[3]/div[4]/div/div[3]/div/div/div/div/div/div/div/div[1]")
 
-    s1 = "/html/body/div[3]/div[4]/div/div[3]/div/div/div/div/div/div/div/div[1]/table/tbody/tr[2]"
-    sss1 = '/html/body/div[3]/div[4]/div/div[3]/div/div/div/div/div/div/div/div[1]/table/tbody/tr[2]/td[2]'
-    ss1 = "***//td[2]"
-    s2 = "/html/body/div[3]/div[4]/div/div[3]/div/div/div/div/div/div/div/div[1]/table/tbody/tr[3]"
-    s3 = "/html/body/div[3]/div[4]/div/div[3]/div/div/div/div/div/div/div/div[1]/table/tbody/tr[22]"
-    ss3 = "//td[2]"
+
     names = list()
     for i in range(2, 1000):
         xpath = f"/html/body/div[3]/div[4]/div/div[3]/div/div/div/div/div/div/div/div[1]/table/tbody/tr[{str(i)}]"
-        if (check_exists_by_xpath_mephi(xpath)):
+        if (check_exists_by_xpath_mephi(xpath , browsermephi)):
             xpath += "/td[2]"
-            if (check_exists_by_xpath_mephi(xpath)):
+            if (check_exists_by_xpath_mephi(xpath , browsermephi)):
                 name = browsermephi.find_element(By.XPATH, xpath)
 
                 names.append(name.text)
@@ -123,6 +125,8 @@ def check_for_mephi(list_mephi: list, newspisok: list):
 spisok = esr("Косолапов", "Кирилл", "Алексеевич", "2008-04-07")
 newspisok = to_name(spisok)
 list_mephi = pars_mephi()
-print(newspisok)
+'''print(newspisok)
 newspisok.append(("Олимпиада школьников «Физтех»", "физика"))
-check_for_mephi(list_mephi, newspisok)
+check_for_mephi(list_mephi, newspisok)'''
+for i in list_mephi:
+    print(i)
