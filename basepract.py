@@ -122,11 +122,3 @@ def check_for_mephi(list_mephi: list, newspisok: list):
     return f
 
 
-spisok = esr("Косолапов", "Кирилл", "Алексеевич", "2008-04-07")
-newspisok = to_name(spisok)
-list_mephi = pars_mephi()
-'''print(newspisok)
-newspisok.append(("Олимпиада школьников «Физтех»", "физика"))
-check_for_mephi(list_mephi, newspisok)'''
-for i in list_mephi:
-    print(i)
