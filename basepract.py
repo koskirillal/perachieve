@@ -124,5 +124,3 @@ def check_for_mephi(list_mephi: list, newspisok: list):
     return f
 
 
-a=pars_mephi()
-print(a)
