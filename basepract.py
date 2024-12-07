@@ -3,9 +3,10 @@ import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+import requests
+from bs4 import BeautifulSoup
 
-
-
+from another_try import strip_update
 
 
 def check_exists_by_xpath(xpath , browser):
@@ -94,22 +95,23 @@ def to_name(a: list):
     return b
 
 
+
 def pars_mephi():
-    browsermephi = webdriver.Chrome()
-    browsermephi.get("https://admission.mephi.ru/admission/baccalaureate-and-specialty/specials/winners")
-    table = browsermephi.find_element(By.XPATH,
-                                      "/html/body/div[3]/div[4]/div/div[3]/div/div/div/div/div/div/div/div[1]")
-
-
+    url = "https://admission.mephi.ru/admission/baccalaureate-and-specialty/specials/winners"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
+    rows = soup.find('table', id="myTable23").find('tbody').find_all('tr')
     names = list()
-    for i in range(2, 1000):
-        xpath = f"/html/body/div[3]/div[4]/div/div[3]/div/div/div/div/div/div/div/div[1]/table/tbody/tr[{str(i)}]"
-        if (check_exists_by_xpath_mephi(xpath , browsermephi)):
-            xpath += "/td[2]"
-            if (check_exists_by_xpath_mephi(xpath , browsermephi)):
-                name = browsermephi.find_element(By.XPATH, xpath)
-
-                names.append(name.text)
+    for i in rows:
+        s = i.text
+        s = strip_update(s)
+        s = s.split('\n')
+        if (len(s) > 2):
+            if (len(s[1]) > 5):
+                if (s[1][:4].upper() == "ВСЕ," or s[1][0].isalpha() == 0):
+                    continue
+                else:
+                    names.append(s[1])
     return names
 
 
@@ -122,3 +124,5 @@ def check_for_mephi(list_mephi: list, newspisok: list):
     return f
 
 
+a=pars_mephi()
+print(a)
