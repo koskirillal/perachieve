@@ -8,8 +8,7 @@ browser.get("https://pk.mipt.ru/bachelor/2023_olympiads/")
 
 
 def pars_mfti_math():
-    '''/html/body/div/div[3]/div[3]/div/div[2]/div[2]/div[1]/table[2]/tbody/tr[2]'''
-    '''/html/body/div/div[3]/div[3]/div/div[2]/div[2]/div[1]/table[2]/tbody/tr[3]'''
+
     spisok = list()
     for i in range(2 ,  1000):
         xpath = f'''/html/body/div/div[3]/div[3]/div/div[2]/div[2]/div[1]/table[2]/tbody/tr[{str(i)}]'''
@@ -31,7 +30,7 @@ def pars_mfti_phys():
             break
     return spisok
 def pars_mfti_ikt():
-
+    '''ikt'''
     spisok = list()
     for i in range (2, 1000):
         xpath=f'''/html/body/div/div[3]/div[3]/div/div[2]/div[2]/div[1]/table[4]/tbody/tr[{str(i)}]/td[2]/p'''
