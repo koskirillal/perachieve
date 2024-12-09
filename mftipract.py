@@ -20,9 +20,7 @@ def pars_mfti_math():
             break
     return spisok
 def pars_mfti_phys():
-    '''/html/body/div/div[3]/div[3]/div/div[2]/div[2]/div[1]/table[3]/tbody/tr[2]/td[2]/p'''
-    '''/html/body/div/div[3]/div[3]/div/div[2]/div[2]/div[1]/table[3]/tbody/tr[3]/td[2]/p'''
-    '''/html/body/div/div[3]/div[3]/div/div[2]/div[2]/div[1]/table[3]/tbody/tr[4]/td[2]/p'''
+
     spisok = list()
     for i in range(2 , 1000):
         xpath = f'''/html/body/div/div[3]/div[3]/div/div[2]/div[2]/div[1]/table[3]/tbody/tr[{str(i)}]/td[2]/p'''
