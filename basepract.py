@@ -51,8 +51,9 @@ def esr(s1, s2, s3, s4):
         if (check_exists_by_xpath(xpath , browser)):
             block = (browser.find_element(By.XPATH, xpath))
             block2 = browser.find_element(By.XPATH , xpath + '''/tbody/tr/td[5]''')
-            if (int(block2.text) >= 10):
-                spisok.append(block.text)
+
+            spisok.append(block.text)
+
 
     return spisok
 
@@ -83,11 +84,11 @@ def to_name(a: list):
                 break
             elif (f == 1):
                 prof += a[i][j]
-        b.append((olymp, prof))
+        b.append((olymp))
     i = 0
     n = len(b)
     while (i < n):
-        if (b[i][0] == '' or b[i][1] == ''):
+        if (b[i] == '' ):
             b.remove(b[i])
             i -= 1
             n -= 1
@@ -117,10 +118,12 @@ def pars_mephi():
 
 def check_for_mephi(list_mephi: list, newspisok: list):
     f = 0
+    spis = list()
     for j in newspisok:
-        if (list_mephi.count(j[0]) > 0):
-            print(j[0])
+        if (list_mephi.count(j) > 0):
+            print(j)
+            spis.append(j)
             f = 1
-    return f
+    return spis
 
 
