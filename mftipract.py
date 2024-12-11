@@ -1,48 +1,31 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+import requests
+import pandas
+from bs4 import BeautifulSoup
+
+from another_try import strip_update, ultima_strip_update
 from basepract import check_exists_by_xpath
-browser = webdriver.Chrome()
-browser.get("https://pk.mipt.ru/bachelor/2023_olympiads/")
 
 
 
-def pars_mfti_math():
-    '''/html/body/div/div[3]/div[3]/div/div[2]/div[2]/div[1]/table[2]/tbody/tr[2]'''
 
-    spisok = list()
-    for i in range(2 ,  1000):
-        xpath = f'''/html/body/div/div[3]/div[3]/div/div[2]/div[2]/div[1]/table[2]/tbody/tr[{str(i)}]'''
-        if (check_exists_by_xpath(xpath , browser)):
-            block = browser.find_element(By.XPATH , xpath)
-            spisok.append(block.text)
-        else:
-            break
-    return spisok
-def pars_mfti_phys():
+def pars_mfti():
+    url = "https://pk.mipt.ru/bachelor/2023_olympiads/"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
+    block=soup.find_all("table" , class_="table table-responsive table-bordered table-hover")[1].find_all_next("tr")
+    lis=list()
+    for i in block:
+        s = (i.text)
+        s=ultima_strip_update(s)
+        if len(s) > 3 and s[0].isdigit() == 1:
+            s=s.split('  ')
 
-    spisok = list()
-    for i in range(2 , 1000):
-        xpath = f'''/html/body/div/div[3]/div[3]/div/div[2]/div[2]/div[1]/table[3]/tbody/tr[{str(i)}]/td[2]/p'''
-        if (check_exists_by_xpath(xpath , browser)):
-            block = browser.find_element(By.XPATH , xpath)
-            spisok.append(block.text)
-        else:
-            break
-    return spisok
-def pars_mfti_ikt():
-
-    spisok = list()
-    for i in range (2, 1000):
-        xpath=f'''/html/body/div/div[3]/div[3]/div/div[2]/div[2]/div[1]/table[4]/tbody/tr[{str(i)}]/td[2]/p'''
-        if(check_exists_by_xpath(xpath , browser)):
-            block = browser.find_element(By.XPATH, xpath)
-            spisok.append(block.text)
-        else:
-            break
-    return spisok
+            lis.append(s[1].strip())
+    return lis
 
 
-a = pars_mfti_ikt()
-for i in a:
-    print(i)
+
+

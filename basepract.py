@@ -1,3 +1,5 @@
+from pickletools import stringnl
+
 import requests
 import pandas as pd
 from selenium import webdriver
@@ -7,7 +9,6 @@ import requests
 from bs4 import BeautifulSoup
 
 from another_try import strip_update
-
 
 def check_exists_by_xpath(xpath , browser):
     try:
@@ -26,6 +27,8 @@ def check_exists_by_xpath_mephi(xpath , browsermephi):
 
 
 def esr(s1, s2, s3, s4):
+
+
     browser = webdriver.Chrome()
     browser.get("https://diploma.olimpiada.ru/full-diplomas")
     inputsur = browser.find_element(By.XPATH,

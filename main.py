@@ -130,7 +130,6 @@ def esout(message):
         global spisok_olymp
         spisok_esr=esr(fullstr[0].strip() , fullstr[1].strip() ,fullstr[2].strip() , fullstr[3].strip())
         spisok_esr = to_name(spisok_esr)
-
         conn = sqlite3.connect('dbase.sql')
         cur = conn.cursor()
         maino = ''
