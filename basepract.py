@@ -61,7 +61,7 @@ def esr(s1, s2, s3, s4):
     return spisok
 
 
-def to_name(a: list):
+def to_name_old_version(a: list):
     b = list()
     for i in range(len(a)):
         olymp = ""
@@ -100,6 +100,8 @@ def to_name(a: list):
 
 
 
+
+
 def pars_mephi():
     url = "https://admission.mephi.ru/admission/baccalaureate-and-specialty/specials/winners"
     response = requests.get(url)
@@ -128,5 +130,23 @@ def check_for_mephi(list_mephi: list, newspisok: list):
             spis.append(j)
             f = 1
     return spis
+
+
+def to_name(a: list):
+    olymp = list()
+    predmet = list()
+    for i in a:
+        k=i.split("скачать")
+        for j in k:
+            predlist = j.split('"')
+            for number in range (len(predlist)):
+
+                if (number == 1):
+                    olymp.append(predlist[number])
+                elif (number == 3):
+                    predmet.append(predlist[number])
+
+
+    return olymp
 
 

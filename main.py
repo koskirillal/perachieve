@@ -66,7 +66,7 @@ def start(message):
     cur = conn.cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY , name UNIQUE, list TEXT )")
     conn.commit()
-    bot.send_message(message.chat.id , "All goodsss" , reply_markup=markup)
+    bot.send_message(message.chat.id , "All good" , reply_markup=markup)
     cur.close()
     conn.close()
 
@@ -123,6 +123,8 @@ def callback_message(callback):
         d = cur.fetchone()
         print(d[0], d[1], d[2])
 
+
+
         cur.close()
         conn.close()
 
@@ -144,6 +146,9 @@ def olin(message):
     d = cur.fetchone()
     maino = d[2] + ' , ' + olymp
     spisok_olymp = maino[:]
+
+
+
     cur.close()
     conn.close()
     conn = sqlite3.connect('dbase.sql')
