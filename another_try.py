@@ -40,8 +40,17 @@ def ultima_strip_update(s: str):
 
     return a
 
+def compare_strip(s:str):
+    a=""
+    for i in s:
+        if(i.isalpha()==1):
+            a+=i.upper()
+    return a
 
-def esr1():
-    url = "https://diploma.olimpiada.ru/full-diplomas"
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, "html.parser")
+def strip_level(s:str):
+    a=""
+    for i in range(len(s)):
+        if (ord(s[i]) != 10):
+            a+=s[i]
+    return a
+

@@ -8,7 +8,9 @@ from selenium.common.exceptions import NoSuchElementException
 import requests
 from bs4 import BeautifulSoup
 
-from another_try import strip_update
+import PyPDF2
+from another_try import strip_update, compare_strip
+
 
 def check_exists_by_xpath(xpath , browser):
     try:
@@ -54,6 +56,7 @@ def esr(s1, s2, s3, s4):
         if (check_exists_by_xpath(xpath , browser)):
             block = (browser.find_element(By.XPATH, xpath))
             block2 = browser.find_element(By.XPATH , xpath + '''/tbody/tr/td[5]''')
+
 
             spisok.append(block.text)
 
@@ -106,7 +109,10 @@ def pars_mephi():
     url = "https://admission.mephi.ru/admission/baccalaureate-and-specialty/specials/winners"
     response = requests.get(url)
     soup = BeautifulSoup(response.text, "html.parser")
-    rows = soup.find('table', id="myTable23").find('tbody').find_all('tr')
+
+    rows = soup.find("div" , class_="field-item even").find("table").find("tbody").find_all("tr")
+
+
     names = list()
     for i in rows:
         s = i.text
@@ -117,6 +123,7 @@ def pars_mephi():
                 if (s[1][:4].upper() == "ВСЕ," or s[1][0].isalpha() == 0):
                     continue
                 else:
+                    print(s)
                     names.append(s[1])
     return names
 
@@ -131,22 +138,64 @@ def check_for_mephi(list_mephi: list, newspisok: list):
             f = 1
     return spis
 
+def chech_for_mephi2(mephi:dict , spis:list()):
+    ans=list()
+    print('chek' , spis)
+
+    for i in spis:
+        if(i[0] in mephi):
+            for j in mephi[i[0]]:
+                '''print('chek',j)
+                print('chek_what' ,i)
+                print('pizdec' , j[0] , i[1])'''
+                if (i[1].upper() == j[0].upper() or i[1].upper() == j[4].upper()):
+                    ans.append([i[0] , j[2] , i[1] , j[4]])
+
+
+        print()
+    return ans
+
 
 def to_name(a: list):
     olymp = list()
     predmet = list()
+
     for i in a:
         k=i.split("скачать")
         for j in k:
             predlist = j.split('"')
-            for number in range (len(predlist)):
+            if(len(predlist)==5):
 
-                if (number == 1):
-                    olymp.append(predlist[number])
-                elif (number == 3):
-                    predmet.append(predlist[number])
+                for number in range (len(predlist)):
+
+                    if (number == 1):
+                        olymp.append(predlist[number])
+                    elif (number == 3):
+                        predmet.append(predlist[number])
 
 
-    return olymp
+    ans =[]
+    for i in range(len(predmet)):
+        ans.append([olymp[i] , predmet[i]])
+
+    return ans
+
+def pars_mephi2():
+    url = "https://admission.mephi.ru/admission/baccalaureate-and-specialty/specials/winners"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    rows = soup.find("div", class_="field-item even").find("table").find("tbody").find_all("tr")
+    a = dict()
+    s=str()
+    for row in rows:
+        rowy = row.find_all('td')
+
+        if (len(rowy) == 7):
+             s = strip_update(rowy[1].text)
+             a[s]=[[strip_update(rowy[5].text) ,str(rowy[2].text).count('I') , strip_update(rowy[3].text) , strip_update(rowy[4].text) ,strip_update(rowy[6].text)]]
+        elif(len(rowy) == 5):
+             a[s].append([strip_update(rowy[3].text) ,str(rowy[0].text).count('I') , strip_update(rowy[1].text) , strip_update(rowy[2].text)  , strip_update(rowy[4].text)])
 
 
+    return a
